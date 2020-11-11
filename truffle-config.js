@@ -21,7 +21,7 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 //
 // const fs = require('fs');
-const mnemonic = ''
+const mnemonic = 'fine tray ill nation chair social deer despair bachelor gift control vote'
 
 module.exports = {
   /**
@@ -33,11 +33,17 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
-
+  api_keys: {
+    etherscan: '72391c6e2f4649f484e0fe26267fb5c5'
+  },
   networks: {
     testnet: {
       provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s1.binance.org:8545`),
       network_id: 97
+    },
+    ropsten: {
+      provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/a58e1573de3144f69f5b612b79e150a6`),
+      network_id: 3
     },
     mainnet: {
       provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed4.binance.org`),
@@ -57,7 +63,7 @@ module.exports = {
       settings: {
         // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
-          enabled: false,
+          enabled: true,
           runs: 200
         }
       }
