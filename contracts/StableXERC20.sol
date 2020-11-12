@@ -1,4 +1,4 @@
-pragma solidity =0.5.16;
+pragma solidity =0.6.12;
 
 import './interfaces/IStableXERC20.sol';
 import './libraries/SafeMath.sol';
