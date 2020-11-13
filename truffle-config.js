@@ -21,7 +21,7 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 //
 // const fs = require('fs');
-const mnemonic = ''
+const mnemonic = 'nose skull need typical enemy plug latin mention increase jeans spend novel'
 
 module.exports = {
   /**
