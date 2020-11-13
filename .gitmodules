@@ -1,0 +1,4 @@
+[submodule "stablexswap-core"]
+	path = stablexswap-core
+	url = git@github.com:stablexlabs/stablexswap-core.git
+	branch = master
