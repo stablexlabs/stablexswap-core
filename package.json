@@ -22,6 +22,8 @@
     "node": ">=10"
   },
   "devDependencies": {
+    "@openzeppelin/cli": "^2.8.2",
+    "@openzeppelin/truffle-upgrades": "^1.2.2",
     "@truffle/hdwallet-provider": "^1.1.1",
     "@types/chai": "^4.2.6",
     "@types/mocha": "^5.2.7",
@@ -45,5 +47,8 @@
     "test": "mocha",
     "prepublishOnly": "yarn test"
   },
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.2.0"
+  }
 }
