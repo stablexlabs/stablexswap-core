@@ -6,7 +6,7 @@ import './libraries/SafeMath.sol';
 contract StableXERC20 is IStableXERC20 {
     using SafeMath for uint;
 
-    string public constant name = 'StableX LPs';
+    string public constant name = 'StableXSwap LPs';
     string public constant symbol = 'STAX-LP';
     uint8 public constant decimals = 18;
     uint  public totalSupply;
