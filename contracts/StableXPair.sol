@@ -152,9 +152,12 @@ contract StableXPair is IStableXPair, StableXERC20 {
      // Working on withdrawal fee, where a 1% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
      // This fee will be future split between STAX stakers and LP providers, to be governed by governance in the future
      // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
+        
         if (feeOn) {
-        _safeTransfer(address(this)), feeTo, liquidity.div(100));
-        _burn(address(this), liquidity.div(100).mul(99);
+        uint fee = liquidity / 100;
+        _safeTransfer(address(this)), feeTo, fee);
+        _burn(address(this), liquidity.sub(fee);
+        // to fix: the logic of safeTransfer
         _safeTransfer(_token0, to, amount0.div(100).mul(99));
         _safeTransfer(_token1, to, amount1.div(100).mul(99));
         } else {
@@ -164,7 +167,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
         }
         balance0 = IERC20(_token0).balanceOf(address(this));
         balance1 = IERC20(_token1).balanceOf(address(this));
-
+     
         _update(balance0, balance1, _reserve0, _reserve1);
         if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
         emit Burn(msg.sender, amount0, amount1, to);
