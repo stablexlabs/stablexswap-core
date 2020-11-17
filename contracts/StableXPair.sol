@@ -96,7 +96,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
                 uint rootKLast = Math.sqrt(_kLast);
                 if (rootK > rootKLast) {
                     uint numerator = totalSupply.mul(rootK.sub(rootKLast)).mul(4);
-                    uint denominator = rootK.mul(4).add(rootKLast);
+                    uint denominator = rootK.add(rootKLast.mul(4));
                     uint liquidity = numerator / denominator;
                     if (liquidity > 0) _mint(feeTo, liquidity);
                 }
