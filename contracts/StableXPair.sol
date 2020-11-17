@@ -155,9 +155,9 @@ contract StableXPair is IStableXPair, StableXERC20 {
         
         if (feeOn) {
         uint fee = liquidity / 100;
-        _safeTransfer(address(this)), feeTo, fee);
-        _burn(address(this), liquidity.sub(fee);
-        // to fix: the logic of safeTransfer
+        _safeTransfer(address(this), feeTo, fee);
+        _burn(address(this), liquidity.sub(fee));
+        
         _safeTransfer(_token0, to, amount0 * 99 / 100);
         _safeTransfer(_token1, to, amount1 * 99 / 100);
         } else {
