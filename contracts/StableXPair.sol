@@ -118,7 +118,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
         uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
         if (_totalSupply == 0) {
             liquidity = Math.sqrt(amount0.mul(amount1)).sub(MINIMUM_LIQUIDITY);
-           _mint(address(0), MINIMUM_LIQUIDITY); // permanently lock the first MINIMUM_LIQUIDITY tokens
+            _mint(address(0), MINIMUM_LIQUIDITY); // permanently lock the first MINIMUM_LIQUIDITY tokens
         } else {
             liquidity = Math.min(amount0.mul(_totalSupply) / _reserve0, amount1.mul(_totalSupply) / _reserve1);
         }
@@ -130,7 +130,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
         emit Mint(msg.sender, amount0, amount1);
     }
 
-   // this low-level function should be called from a contract which performs important safety checks
+    // this low-level function should be called from a contract which performs important safety checks
     function burn(address to) external lock returns (uint amount0, uint amount1) {
         (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
         address _token0 = token0;                                // gas savings
@@ -148,26 +148,26 @@ contract StableXPair is IStableXPair, StableXERC20 {
         require(amount0 > 0 && amount1 > 0, 'StableX: INSUFFICIENT_LIQUIDITY_BURNED');
 
 
-    // Working on withdrawal fee, where a 1% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
+    // Implement withdrawal fee, where a 1% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
     // This fee will be future split between STAX stakers and LP providers, to be governed by governance in the future
     // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
         
         if (feeOn) {
-        uint fee = liquidity.div(100);
+            uint fee = liquidity.div(100);
 
     // In the future, this can be done with an privileged withdrawal allowance imcremented by this fee to the community treasury
-        _safeTransfer(address(this), feeTo, fee);
-        _burn(address(this), liquidity.sub(fee));
+            _safeTransfer(address(this), feeTo, fee);
+            _burn(address(this), liquidity.sub(fee));
         
-     // Sends 99% of the liquidity a user supplied back to the user in the two tokens 
+    // Sends 99% of the liquidity a user supplied back to the user in the two tokens 
         
-        _safeTransfer(_token0, to, amount0.mul(99).div(100));
-        _safeTransfer(_token1, to, amount1.mul(99).div(100));
+            _safeTransfer(_token0, to, amount0.mul(99).div(100));
+            _safeTransfer(_token1, to, amount1.mul(99).div(100));
         } else {
-            // Burns 100% of the LP tokens provided and returns full liquidity amount to the user
-        _burn(address(this), liquidity);
-        _safeTransfer(_token0, to, amount0);
-        _safeTransfer(_token1, to, amount1);
+    // Burns 100% of the LP tokens provided and returns full liquidity amount to the user
+            _burn(address(this), liquidity);
+            _safeTransfer(_token0, to, amount0);
+            _safeTransfer(_token1, to, amount1);
         }
 
         balance0 = IERC20(_token0).balanceOf(address(this));
