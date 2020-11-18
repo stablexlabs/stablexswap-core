@@ -150,7 +150,8 @@ contract StableXPair is IStableXPair, StableXERC20 {
 
     // Implement withdrawal fee, where a 1% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
     // This fee will be future split between STAX stakers and LP providers, to be governed by governance in the future
-    // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
+    // Holders of STAX can be refunded to users from the feeTo address (STAX community treasury) in a separate program, based on their STAX holdings
+    // Thus, liquidity providers who hold or stake STAX will get the benefit of free or reduced withdrawal fees in rebate program handled from feeTo.
         
         if (feeOn) {
             uint fee = liquidity.div(100);
