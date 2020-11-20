@@ -147,7 +147,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
      
         amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution
         amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution
-        require(amount0 > 0 && amount1 > 0, 'StableX: INSUFFICIENT_LIQUIDITY_BURNED')
+        require(amount0 > 0 && amount1 > 0, 'StableX: INSUFFICIENT_LIQUIDITY_BURNED');
         
     // feeTo is also only used in this scope
        address feeTo = IStableXFactory(factory).feeTo();
