@@ -151,12 +151,15 @@ contract StableXPair is IStableXPair, StableXERC20 {
         
         amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution
         amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution
-        require(amount0 > 0 && amount1 > 0, 'StableX: INSUFFICIENT_LIQUIDITY_BURNED');
+        require(amount0 > 0 && amount1 > 0, 'StableX: INSUFFICIENT_LIQUIDITY_BURNED'
+        
+        }
     // Implement withdrawal fee, where a 1% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
     // This fee will be future split between STAX stakers and LP providers, to be governed by governance in the future
     // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
     // There should be no cases in which feeOn is true and feeTo is not a real address.  
-    // Fee is only used in this scope  
+    
+    { // Fee is only used in this scope  
         if (feeOn) {
             uint fee = liquidity.div(100);
 
