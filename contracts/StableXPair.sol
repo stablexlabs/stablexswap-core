@@ -130,38 +130,42 @@ contract StableXPair is IStableXPair, StableXERC20 {
         emit Mint(msg.sender, amount0, amount1);
     }
 
-    // this low-level function should be called from a contract which performs important safety checks
+ 
+        
+   // this low-level function should be called from a contract which performs important safety checks
     function burn(address to) external lock returns (uint amount0, uint amount1) {
         (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
+             
         address _token0 = token0;                                // gas savings
         address _token1 = token1;                                // gas savings
-        
         uint balance0 = IERC20(_token0).balanceOf(address(this));
         uint balance1 = IERC20(_token1).balanceOf(address(this));
         uint liquidity = balanceOf[address(this)];
-        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
+
         bool feeOn = _mintFee(_reserve0, _reserve1);
-    
+        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
         
-        { // scope for amount{0,1}, avoids stack too deep errors
-     
         amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution
         amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution
-        require(amount0 > 0 && amount1 > 0, 'StableX: INSUFFICIENT_LIQUIDITY_BURNED');
-        
-    // feeTo is also only used in this scope
-       address feeTo = IStableXFactory(factory).feeTo();
+        require(amount0 > 0 && amount1 > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED');
       
     // Implement withdrawal fee, where a 1% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
     // This fee will be future split between STAX stakers and LP providers, to be governed by governance in the future
+    // This fee can be mitigated by users by holding STAX to get a discount or get the fee fully waived, based on their average 30 day holdings.
     // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
     // There should be no cases in which feeOn is true and feeTo is not a real address.  
     
-    // Fee is only used in this scope  
+    // Fee is only used in this conditional 
+    // In future, can make this fee editable by owner.
+    // feeTo is also only used in this scope
+    // Also, it is pointless to call feeTo unless feeOn is true
+    
         if (feeOn) {
+            address feeTo = IStableXFactory(factory).feeTo();
             uint fee = liquidity.div(100);
-
+            
     // In the future, this can be done with an privileged withdrawal allowance imcremented by this fee to the community treasury
+            
             _safeTransfer(address(this), feeTo, fee);
             _burn(address(this), liquidity.sub(fee));
         
@@ -175,17 +179,20 @@ contract StableXPair is IStableXPair, StableXERC20 {
             _safeTransfer(_token0, to, amount0);
             _safeTransfer(_token1, to, amount1);
         }
-        }
-        { // scope for balance{0,1}, avoids stack too deep errors
+    // Grabs the new balances of the tokens in the LP pool after the withdrawal takes place
+        
         balance0 = IERC20(_token0).balanceOf(address(this));
         balance1 = IERC20(_token1).balanceOf(address(this));
+
         _update(balance0, balance1, _reserve0, _reserve1);
-        }
         if (feeOn) {
         kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
         }
         emit Burn(msg.sender, amount0, amount1, to);
-    }
+    }     
+        
+
+
 
     // this low-level function should be called from a contract which performs important safety checks
     function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external lock {
