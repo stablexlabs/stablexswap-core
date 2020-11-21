@@ -141,7 +141,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
         uint balance0 = IERC20(_token0).balanceOf(address(this));
         uint balance1 = IERC20(_token1).balanceOf(address(this));
         uint liquidity = balanceOf[address(this)];
-        
+
         bool feeOn = _mintFee(_reserve0, _reserve1);
         uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
         
@@ -155,15 +155,17 @@ contract StableXPair is IStableXPair, StableXERC20 {
     // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
     // There should be no cases in which feeOn is true and feeTo is not a real address.  
     
-    // Fee is only used in this scope  
+    // Fee is only used in this conditional 
     // In future, can make this fee editable by owner.
+    // feeTo is also only used in this scope
+    // Also, it is pointless to call feeTo unless feeOn is true
+    
         if (feeOn) {
-            // feeTo is also only used in this scope
-            // Also, it is pointless to call feeTo unless feeOn is true
             address feeTo = IStableXFactory(factory).feeTo();
             uint fee = liquidity.div(100);
             
     // In the future, this can be done with an privileged withdrawal allowance imcremented by this fee to the community treasury
+            
             _safeTransfer(address(this), feeTo, fee);
             _burn(address(this), liquidity.sub(fee));
         
