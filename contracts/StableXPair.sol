@@ -159,7 +159,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
     // In future, can make this fee editable by owner.
     // feeTo is also only used in this scope
     // Also, it is pointless to call feeTo unless feeOn is true
-    { // Because Fee and feeTo is only in this block, we can safely use the Uniswap scoping method to remove them from our stack after this block is executed
+    { // SCOPING TRICK: Because Fee and feeTo is only in this block, we can safely use the Uniswap scoping method to remove them from our stack after this block is executed
         if (feeOn) {
             address feeTo = IStableXFactory(factory).feeTo();
             uint fee = liquidity.div(100);
