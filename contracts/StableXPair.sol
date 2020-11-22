@@ -18,6 +18,10 @@ contract StableXPair is IStableXPair, StableXERC20 {
     address public factory;
     address public token0;
     address public token1;
+    
+    struct addressPair {
+    
+    }
 
     uint112 private reserve0;           // uses single storage slot, accessible via getReserves
     uint112 private reserve1;           // uses single storage slot, accessible via getReserves
@@ -149,25 +153,24 @@ contract StableXPair is IStableXPair, StableXERC20 {
         amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution
         require(amount0 > 0 && amount1 > 0, 'StableX: INSUFFICIENT_LIQUIDITY_BURNED');
       
-    // Implement withdrawal fee, where a 1% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
+    // Implement withdrawal fee, where a 0.5% fee is levied on withdrawals if feeOn, to incentivize people to hold longer in the pools
     // This fee will be future split between STAX stakers and LP providers, to be governed by governance in the future
     // This fee can be mitigated by users by holding STAX to get a discount or get the fee fully waived, based on their average 30 day holdings.
     // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
     // There should be no cases in which feeOn is true and feeTo is not a real address.  
     
-    // Fee is only used in this conditional 
+    // In this version, we use liquidity.div(100) instead of Fee variable to save on our stack variables.
     // In future, can make this fee editable by owner.
-    // feeTo is also only used in this scope
+    // Getting IStableXFactory(factory)feeTo directly from the Factory, which is also only used in this scope
+    // This makes the _safeTrasnfer of the fee a bit more messy but in attempts to make the scope work.
     // Also, it is pointless to call feeTo unless feeOn is true
     { // SCOPING TRICK: Because Fee and feeTo is only in this block, we can safely use the Uniswap scoping method to remove them from our stack after this block is executed
         if (feeOn) {
-            address feeTo = IStableXFactory(factory).feeTo();
-            uint fee = liquidity.div(100);
             
     // In the future, this can be done with an privileged withdrawal allowance imcremented by this fee to the community treasury
             
-            _safeTransfer(address(this), feeTo, fee);
-            _burn(address(this), liquidity.sub(fee));
+            _safeTransfer(address(this), IStableXFactory(factory).feeTo(), liquidity.div(100));
+            _burn(address(this), liquidity.sub(liquidity.div(100)));
         
     // Sends 99% of the liquidity a user supplied back to the user in the two tokens 
         
@@ -186,10 +189,12 @@ contract StableXPair is IStableXPair, StableXERC20 {
         
         balance0 = IERC20(_token0).balanceOf(address(this));
         balance1 = IERC20(_token1).balanceOf(address(this));
-
+       
         _update(balance0, balance1, _reserve0, _reserve1);
+        { //Attempting Scoping trick to keep kLast separate from the rest
         if (feeOn) {
         kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
+        }
         }
         emit Burn(msg.sender, amount0, amount1, to);
     }     
