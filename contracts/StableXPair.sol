@@ -194,7 +194,6 @@ contract StableXPair is IStableXPair, StableXERC20 {
             _safeTransfer(_token0, to, amount0);
             _safeTransfer(_token1, to, amount1);
     }
-    // }
     
         
     // Grabs the new balances of the tokens in the LP pool after the withdrawal takes place
