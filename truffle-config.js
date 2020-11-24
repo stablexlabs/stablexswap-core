@@ -10,10 +10,6 @@ module.exports = {
         mainnet: {
             provider: () => new HDWalletProvider(`${process.env.MNEMONIC}`, `https://bsc-dataseed4.binance.org`),
             network_id: 56
-        },
-        reposten:{
-            provider: () => new HDWalletProvider(`${process.env.MNEMONIC}`, `https://ropsten.infura.io/v3/${process.env.INFURA_ID}`),
-            network_id: 3
         }
     },
     plugins: [
