@@ -45,7 +45,7 @@ The following assumes the use of `node@>=10`.
     
     3.2 Mainnet
     
-    The deploy script will deploy contract `StableXFactory` and call proxy contract `0x18be671d4221E9C7f2642A0182F3b3Fb7913Cd3b` to upgrade its implementation to the new deployed contract.
+    The deploy script will deploy contract `StableXFactory` and call [StableXFactoryProxy.sol](https://bscscan.com/address/0x18be671d4221E9C7f2642A0182F3b3Fb7913Cd3b#code) to upgrade its implementation to the new deployed contract.
     
         ```shell script
         truffle migrate -f 2 --network mainnet
