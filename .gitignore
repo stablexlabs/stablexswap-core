@@ -1,5 +1,4 @@
 node_modules/
 build/
-truffle-config.js
-migrations
 .DS_Store
+.idea/*
