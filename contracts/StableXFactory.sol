@@ -6,8 +6,6 @@ import './StableXPair.sol';
 contract StableXFactory is IStableXFactory {
     bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(type(StableXPair).creationCode));
 
-    bool public initialized = false;
-
     address public feeTo;
     address public feeToSetter;
 
@@ -16,13 +14,9 @@ contract StableXFactory is IStableXFactory {
 
     event PairCreated(address indexed token0, address indexed token1, address pair, uint);
 
-    constructor() public {
-    }
 
-    function initialize(address _feeToSetter) public {
-        require(!initialized, "already initialized");
+   constructor(address _feeToSetter) public {
         feeToSetter = _feeToSetter;
-        initialized = true;
     }
 
     function allPairsLength() external view returns (uint) {
