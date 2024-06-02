@@ -150,7 +150,9 @@ contract StableXPair is IStableXPair, StableXERC20 {
     // This fee can be mitigated by users by holding STAX to get a discount or get the fee fully waived, based on their average 30 day holdings.
     // If this fee is determined to be too punitive, this can be manually refunded to users on an ad-hoc basis from the STAX community Treasury
     
+
     // In this version, we use liquidity.div(201) instead of Fee variable to save on our stack variables.
+
     // In future, can make this fee editable by owner.
     // Getting IStableXFactory(factory)feeTo directly from the Factory, which is also only used in this scope
     // This makes the _safeTransfer of the fee a bit more messy but in attempts to make the scope work.
@@ -169,11 +171,14 @@ contract StableXPair is IStableXPair, StableXERC20 {
     
     // Fee calculation and _burn & _safeTransfer section
     // In the future, this can be done with an privileged withdrawal allowance imcremented by this fee to the community treasury
+
     // If true, Recalculates 99.5025% of the liquidity a user to be withdrawn in amount0 and amount1 for the tokens, 
+
     // otherwise no action needed on amount{0,1}
     // Subsequently burns corresponding LP tokens (with or without fee) provided    
     
        if (feeOn) {
+
 
             amount0 -= amount0.div(201);
             amount1 -= amount1.div(201);
@@ -184,7 +189,7 @@ contract StableXPair is IStableXPair, StableXERC20 {
     // Proceeds with the burn amount with the 0.4975% fee removed 
     // (which is not withdrawn from the pools and instead LP tokens are sent directly to the feeTo address above       
             _burn(address(this), liquidity.sub(liquidity.div(201)));
-            
+
        } else {
     // Burns the full amount
             _burn(address(this), liquidity);
